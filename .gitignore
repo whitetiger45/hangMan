@@ -1,0 +1,27 @@
+# cmake
+build*/
+
+# sublime
+*.sublime-*
+
+# qtcreator
+CMakeLists.txt.user
+
+# kdevelop
+*.kdev4
+.kdev4/
+
+# clion
+.idea/
+
+# biicode
+bin/
+bii/
+biicode.conf
+
+# macosx
+.DS_Store
+
+# Backup files
+*.cpp~
+
