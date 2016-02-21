@@ -25,6 +25,7 @@ typedef std::vector<std::string> HangmanDictionary;
 func(Title, "\n\t   ***********\n\t   * Hangman *\n\t   ***********\n\t ______\n\t|     |\n\t|    \n\t|           o\n\t|          /|\\ \n\t|______    / \\\n\t*****************\n")
 func(Menu, "\n\t Main Menu\n\t =========    \n     1: Survival Mode\n     2: Timed Mode\n     3: Regular Mode\n     4: High Scores\n     5: Quit\n")
 func(SubMenu, "\nWhat would you like to do?\n_______________________________\n\n1) Guess Letter\n2) Guess Word\n3) See what letters you've guessed\n4) Show Unfinished Word\n5) How Many Incorrect Guesses Left?\n6) Display HangMan Board\n7) Exit App\n_______________________________\n")
+func(SubMenuWithReturnToGameModeOption, "\nWhat would you like to do?\n_______________________________\n\n1) Guess Letter\n2) Guess Word\n3) See what letters you've guessed\n4) Show Unfinished Word\n5) How Many Incorrect Guesses Left?\n6) Display HangMan Board\n7) Return To Game Mode Menu\n8) Quit\n_______________________________\n")
 #undef func
 
 #define func(n,a) void ask##n(){std::cout << a << "\n";}
@@ -833,7 +834,24 @@ class word
         }
 
 //-----------------------------------------------------------------------------------------------------------------------
-
+        
+        si getGuessCount() const
+        { 
+            return m_guessCount;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+        
+        tf setUserAlreadyPlayedOneRound()
+        { 
+            m_userAlreadyPlayedOneRound = (m_userAlreadyPlayedOneRound) ? false : true;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+        
+        tf userAlreadyPlayedOneRound() const
+        { 
+            return m_userAlreadyPlayedOneRound;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
   private:
 
         tf m_survivorModeEnabled = false;
@@ -875,6 +893,7 @@ class word
 
         //timed play stuff
         tf m_displayedRulesOnce;
+        tf m_userAlreadyPlayedOneRound;
 };
 
 #endif // HANGMAN_HXX

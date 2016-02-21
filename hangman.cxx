@@ -46,6 +46,10 @@ si main()
     string userGameModeMenuResponse_str;
     cout << "User: "; cin >> userGameModeMenuResponse_str;
 
+//reset the user already played one round variable before selecting a new game mode
+    if(guess.userAlreadyPlayedOneRound())
+        guess.setUserAlreadyPlayedOneRound();
+
     while(!isdigit(userGameModeMenuResponse_str[0]))
     {
         cout << "\nYou must enter a valid menu option (1-2)\n";
@@ -194,20 +198,38 @@ si main()
             }
 
             const l * userGuessWord;
-            tf guessSinglel = true, userGuessedRightWord = false;
-
-            showSubMenu();
             string userSubMenuResponse_str;
-            cout << "User: "; cin >> userSubMenuResponse_str;
-
-            while(!isdigit(userSubMenuResponse_str[0]))
+            tf guessSinglel = true, userGuessedRightWord = false;
+//-------------------------------------------------------------------------------------------------------
+            if(guess.getGuessCount() == 0 && !guess.userAlreadyPlayedOneRound())
             {
-                cout << "\nYou must enter a valid menu option (1-7)\n";
-                showSubMenu(); cout << "User: "; cin >> userSubMenuResponse_str;
+                showSubMenuWithReturnToGameModeOption();
+                cout << "User: "; cin >> userSubMenuResponse_str;
+                while(!isdigit(userSubMenuResponse_str[0]))
+                {
+                    cout << "\nYou must enter a valid menu option (1-8)\n";
+                    showSubMenu(); cout << "User: "; cin >> userSubMenuResponse_str;
+                }
+                guess.setUserAlreadyPlayedOneRound();
+            }
+            else
+            {
+                showSubMenu();
+                cout << "User: "; cin >> userSubMenuResponse_str;
+                while(!isdigit(userSubMenuResponse_str[0]))
+                {
+                    cout << "\nYou must enter a valid menu option (1-7)\n";
+                    showSubMenu(); cout << "User: "; cin >> userSubMenuResponse_str;
+                }
             }
 
-            userSubMenuResponseI = stoi(userSubMenuResponse_str);
 
+            userSubMenuResponseI = stoi(userSubMenuResponse_str);
+            if(guess.getGuessCount() == 0 && userSubMenuResponseI == 7 )
+                goto gameModeMenu;
+            else if(guess.getGuessCount() == 0 && userSubMenuResponseI == 8)
+                goto quit;
+//---------------------------------------------------------------------------------------------------------
             switch(userSubMenuResponseI)
             {
                 case 1:
