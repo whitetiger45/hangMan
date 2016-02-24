@@ -604,6 +604,9 @@ class word
                     // resetTimedModeScore();
                 }
 
+                //initial indicator user broke a record
+                setUserBrokeARecord();
+
                 remove(fileName.c_str());
             }
             else if(userScoreSurvivorMode > getRecordNumberOfGamesWonSurvivorMode())
@@ -616,6 +619,8 @@ class word
                     setRecordNumberOfGamesTimedMode(userScoreTimedMode);
                     // resetTimedModeScore();
                 }
+                //mew record indicator
+                setUserBrokeARecord();
 
                 remove(fileName.c_str());
             }
@@ -626,10 +631,15 @@ class word
                     setRecordNumberOfGamesTimedMode(userScoreTimedMode);
                     // resetTimedModeScore();
                 }
+
+                //new record indicator
+                setUserBrokeARecord();
+
                 remove(fileName.c_str());
             }
             else if(userScoreTimedMode > getRecordNumberOfGamesWonTimedMode())
             {
+                //new record indicator
                 remove(fileName.c_str());
             }
             else return;
@@ -805,14 +815,16 @@ class word
 
             std::cout << "**Stats**\n";
 
+            if(userSetANewRecord())
+            {
+                std::cout << "\n*** You Set A New High Score ***\n";
+                setUserBrokeARecord();
+            }
+
             if(survivorModeEnabled())
                 scoreBoardSurvivorMode();
             else if(timedModeEnabled())
                 scoreBoardTimedMode();
-
-            // std::cout << "\nRecord number of games won (Timed): " << getRecordNumberOfGamesWonTimedMode();
-            // std::cout << "\nRecord number of games won (Regular): " << getRecordNumberOfGamesWonRegularMode();
-            // std::cout << "\nRecord number of games won (Survivor): " << getRecordNumberOfGamesWonSurvivorMode() << "\n";
 
             if(checkDictionaryMapLettersEqualToMaxCount() == 1)
                 std::cout << getMostFrequentLetterFromDictionaryWord();
@@ -850,6 +862,18 @@ class word
         tf userAlreadyPlayedOneRound() const
         { 
             return m_userAlreadyPlayedOneRound;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+        
+        tf setUserBrokeARecord()
+        { 
+            m_userBrokeARecord = (m_userBrokeARecord) ? false : true;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+        
+        tf userSetANewRecord() const
+        { 
+            return m_userBrokeARecord;
         }
 //-----------------------------------------------------------------------------------------------------------------------
   private:
@@ -894,6 +918,8 @@ class word
         //timed play stuff
         tf m_displayedRulesOnce;
         tf m_userAlreadyPlayedOneRound;
+
+        tf m_userBrokeARecord;
 };
 
 #endif // HANGMAN_HXX
