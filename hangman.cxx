@@ -1,26 +1,4 @@
-#include <csignal>
-#include <cstdlib>
-#include <cstdio>
-#include <ctime>
-#include <cctype>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <string>
-#include <typeinfo>
-
 #include "hangman.hxx"
-
-void (*result_handler)(si);
-typedef void (*getResultFunc)(si);
-
-void endOfRoundMessage(getResultFunc result)
-{
-    result_handler = signal(SIGINT, result);
-}
-
-l response[] = {'n', 'y', 's', 'm'};
-enum {n, y};
 
 using namespace std;
 

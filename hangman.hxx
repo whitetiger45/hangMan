@@ -1,17 +1,6 @@
 #ifndef HANGMAN_HXX
 #define HANGMAN_HXX
 
-#include <chrono>
-#include <cstdlib>
-#include <ctime>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <map>
-#include <string>
-#include <regex>
-#include <vector>
-
 #include "utilities.hxx"
 
 class word

@@ -1,6 +1,20 @@
 #ifndef UTILITIES_HXX
 #define UTILITIES_HXX
 
+#include <cctype>
+#include <chrono>
+#include <csignal>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <map>
+#include <string>
+#include <regex>
+#include <typeinfo>
+#include <vector>
 #include "hangman.hxx"
 
 typedef bool tf;
@@ -74,5 +88,16 @@ auto addWhiteSpaceAndEndlChar =
         std::cout << appendStr << "\n";
     };
 
+void (*result_handler)(si);
+typedef void (*getResultFunc)(si);
+
+void endOfRoundMessage(getResultFunc result)
+{
+    result_handler = signal(SIGINT, result);
+}
+//------------------------------------------------------------------------------------------------------------------------
+
+l response[] = {'n', 'y', 's', 'm'};
+enum {n, y};
 
 #endif // UTILITIES
