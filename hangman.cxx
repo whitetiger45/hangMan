@@ -246,7 +246,12 @@ si main()
                     }
                     else if(userGuess_str.size() > 1)
                     {
-                        cout << "\n**You entered more than one lacter...please enter only one letter**\n";
+                        cout << "\n**You entered more than one character...please enter only one letter**\n";
+                        goto caseOneStart;
+                    }
+                    else if(!isalpha(userGuess_str[0]))
+                    {
+                        cout << "\n**You did not enter a valid character!**\n";
                         goto caseOneStart;
                     }
                     else
@@ -400,7 +405,10 @@ si main()
                     streak++;
                 
                 if(streak > guess.getMaxStreak())
+                {
                     guess.setMaxStreak(streak);
+                    cout << "\n***New Streak Record***\n";
+                }
                 guess.displayHangMan();
             }
 
@@ -445,7 +453,11 @@ si main()
         if(guess.survivorModeEnabled())
         {
             if(userWonRound)
+            {
                 userResponse[0] = 'y';
+                if( guess.getCurrentNumberOfGamesWonSurvivorMode() > guess.getRecordNumberOfGamesWonSurvivorMode() )
+                    cout << "\n***New Survivor Mode Record (Games Won) ***\n";
+            }
             else
                 userResponse[0] = 'n';
         }
@@ -457,12 +469,20 @@ si main()
                 declareOutOfTime(guess.getAverageTimeToGuessTracker(), guess.getWord());
             }
             if(userWonRound)
+            {
                 userResponse[0] = 'y';
+                if( guess.getCurrentNumberOfGamesWonTimedMode() > guess.getRecordNumberOfGamesWonTimedMode() )
+                    cout << "\n***New Timed Mode Record (Games Won) ***\n";
+            }
             else
                 userResponse[0] = 'n';
         }
         else
         {
+
+            if( guess.getCurrentNumberOfGamesWonRegularMode() > guess.getRecordNumberOfGamesWonRegularMode() )
+                cout << "\n***New Regular Mode Record (Games Won) ***\n";
+
             askPlayAgain();
             cin >> userResponse;
             if(isupper(userResponse[0]))
@@ -509,7 +529,7 @@ si main()
     }while(playAgain);
 
     //scoreBoard();
-    if(guess.survivorModeEnabled())
+    if(guess.survivorModeEnabled() && userSubMenuResponseI != 7)
     {
         guess.getStats();
         guess.resetSurvivorModeScore();
@@ -519,7 +539,7 @@ si main()
         streak = 0;
         goto gameModeMenu;
     }
-    else if(guess.timedModeEnabled())
+    else if(guess.timedModeEnabled() && userSubMenuResponseI != 7)
     {
         guess.getStats();
         guess.resetTimedModeScore();

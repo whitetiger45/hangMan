@@ -327,15 +327,33 @@ class word
         }
 //-----------------------------------------------------------------------------------------------------------------------
 
+        si getCurrentNumberOfGamesWonSurvivorMode() const
+        {
+            return userScoreSurvivorMode;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+
         si getRecordNumberOfGamesWonRegularMode() const
         {
             return m_recordNumberOfGamesWonRegularMode;
         }
 //-----------------------------------------------------------------------------------------------------------------------
 
+        si getCurrentNumberOfGamesWonRegularMode() const
+        {
+            return userScoreRegularMode;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+
         si getRecordNumberOfGamesWonTimedMode() const
         {
             return m_recordNumberOfGamesWonTimedMode;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+
+        si getCurrentNumberOfGamesWonTimedMode() const
+        {
+            return userScoreTimedMode;
         }
 //-----------------------------------------------------------------------------------------------------------------------
 
@@ -756,7 +774,6 @@ class word
             std::cout << "\n# of times first guess was correct and you won the round: ";
             std::cout << m_firstGuessToWonRoundConversionTracker << "\n";
 
-            //testing 
             std::cout << "\nAverage time to make a guess: " << std::setprecision(1) << getAverageTimeToGuessTracker() << " seconds\n";
 
             updateRecordBook();
