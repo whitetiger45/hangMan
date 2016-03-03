@@ -29,6 +29,7 @@ typedef std::vector<std::string> HangmanDictionary;
 #define func(n, a) void show##n(){std::cout << a << "\n";}
 func(Title, "\n\t   ***********\n\t   * Hangman *\n\t   ***********\n\t ______\n\t|     |\n\t|    \n\t|           o\n\t|          /|\\ \n\t|______    / \\\n\t*****************\n")
 func(Menu, "\n\t Main Menu\n\t =========    \n     1: Survival Mode\n     2: Timed Mode\n     3: Regular Mode\n     4: High Scores\n     5: Quit\n")
+func(MenuWithStatsOption, "\n\t Main Menu\n\t =========    \n     1: Survival Mode\n     2: Timed Mode\n     3: Regular Mode\n     4: Last Game Stats\n     5: High Scores\n     6: Quit\n")
 func(SubMenu, "\nWhat would you like to do?\n_______________________________\n\n1) Guess Letter\n2) Guess Word\n3) See what letters you've guessed\n4) Show Unfinished Word\n5) How Many Incorrect Guesses Left?\n6) Display HangMan Board\n7) Exit App\n_______________________________\n")
 func(SubMenuWithReturnToGameModeOption, "\nWhat would you like to do?\n_______________________________\n\n1) Guess Letter\n2) Guess Word\n3) See what letters you've guessed\n4) Show Unfinished Word\n5) How Many Incorrect Guesses Left?\n6) Display HangMan Board\n7) Return To Game Mode Menu\n8) Quit\n_______________________________\n")
 #undef func

@@ -6,7 +6,7 @@ si main()
 {
     word guess;
     string line;
-    tf playAgain = false;
+    tf playAgain = false, userHasCompletedARound = false;
     tf userWonRound = false, survivorModeEnabled = false;
     tf inGame = false;
     l userResponse[1];
@@ -20,7 +20,11 @@ si main()
 
     gameModeMenu:
 
-    showMenu();
+    if(!userHasCompletedARound)
+        showMenu();
+    else
+        showMenuWithStatsOption();
+
     string userGameModeMenuResponse_str;
     cout << "User: "; cin >> userGameModeMenuResponse_str;
 
@@ -30,12 +34,25 @@ si main()
 
     while(!isdigit(userGameModeMenuResponse_str[0]))
     {
-        cout << "\nYou must enter a valid menu option (1-2)\n";
+        cout << "\nYou must enter a valid menu option (1-4)\n";
         showMenu(); cout << "User: "; cin >> userGameModeMenuResponse_str;
     }
 
     si userGameModeMenuResponse_I = 1;
     userGameModeMenuResponse_I = stoi(userGameModeMenuResponse_str);
+
+    //update user mode menu response according to menu displayed
+    if(userHasCompletedARound)
+    {
+        if(userGameModeMenuResponse_I == 4)
+        {
+            guess.getStats();
+            goto gameModeMenu;
+        }
+        else if(userGameModeMenuResponse_I > 4)
+            userGameModeMenuResponse_I--;
+    }
+
     switch(userGameModeMenuResponse_I)
     {
         case 1:
@@ -456,7 +473,7 @@ si main()
             {
                 userResponse[0] = 'y';
                 if( guess.getCurrentNumberOfGamesWonSurvivorMode() > guess.getRecordNumberOfGamesWonSurvivorMode() )
-                    cout << "\n***New Survivor Mode Record (Games Won) ***\n";
+                    cout << "\n*** New Survivor Mode Record (Games Won) ***\n";
             }
             else
                 userResponse[0] = 'n';
@@ -472,7 +489,7 @@ si main()
             {
                 userResponse[0] = 'y';
                 if( guess.getCurrentNumberOfGamesWonTimedMode() > guess.getRecordNumberOfGamesWonTimedMode() )
-                    cout << "\n***New Timed Mode Record (Games Won) ***\n";
+                    cout << "\n*** New Timed Mode Record (Games Won) ***\n";
             }
             else
                 userResponse[0] = 'n';
@@ -480,8 +497,10 @@ si main()
         else
         {
 
+            userHasCompletedARound = true;
+
             if( guess.getCurrentNumberOfGamesWonRegularMode() > guess.getRecordNumberOfGamesWonRegularMode() )
-                cout << "\n***New Regular Mode Record (Games Won) ***\n";
+                cout << "\n*** New Regular Mode Record (Games Won) ***\n";
 
             askPlayAgain();
             cin >> userResponse;
@@ -532,21 +551,23 @@ si main()
     if(guess.survivorModeEnabled() && userSubMenuResponseI != 7)
     {
         guess.getStats();
-        guess.resetSurvivorModeScore();
-        guess.resetTries();
-        guess.resetFirstGuessLettersMap();
-        guess.resetAverageTimeDifferenceToGuessTracker();
+        // guess.resetSurvivorModeScore();
+        // guess.resetTries();
+        // guess.resetFirstGuessLettersMap();
+        // guess.resetAverageTimeDifferenceToGuessTracker();
         streak = 0;
+        userHasCompletedARound = true;
         goto gameModeMenu;
     }
     else if(guess.timedModeEnabled() && userSubMenuResponseI != 7)
     {
         guess.getStats();
-        guess.resetTimedModeScore();
-        guess.resetTries();
-        guess.resetFirstGuessLettersMap();
-        guess.resetAverageTimeDifferenceToGuessTracker();
+        // guess.resetTimedModeScore();
+        // guess.resetTries();
+        // guess.resetFirstGuessLettersMap();
+        // guess.resetAverageTimeDifferenceToGuessTracker();
         streak = 0;
+        userHasCompletedARound = true;
         goto gameModeMenu;
     }
     else 
