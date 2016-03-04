@@ -13,8 +13,11 @@ si main()
     l userGuess[1];
     si getWordAtLocation = 0, correctOrSameGuessCounter = 0, userSubMenuResponseI = 0, streak = 0;
     guess.setUserRecords();
-    // cout << "***D/Records\nSurvivor: " << guess.getRecordNumberOfGamesWonSurvivorMode();
-    // cout << "\nRegular: " << guess.getRecordNumberOfGamesWonRegularMode() << "\n***\n";
+    cout << "***\nRecords\nTimed: " << guess.getRecordNumberOfGamesWonTimedMode();
+    cout << "\nStreak: " << guess.getUsersBestStreakOfAllTime()<< "\n";
+    guess.userBeatTopThreeScoreTimedModeRecordsMap(0);
+    cout << "\n***\n";
+
 
     showTitle();
 
@@ -32,10 +35,12 @@ si main()
     if(guess.userAlreadyPlayedOneRound())
         guess.setUserAlreadyPlayedOneRound();
 
-    while(!isdigit(userGameModeMenuResponse_str[0]))
+    if(!isdigit(userGameModeMenuResponse_str[0]))
     {
-        cout << "\nYou must enter a valid menu option (1-4)\n";
-        showMenu(); cout << "User: "; cin >> userGameModeMenuResponse_str;
+
+        //cout << "User: "; cin >> userGameModeMenuResponse_str;
+        cout << "\nYou must enter a valid menu option!!\n";
+        goto gameModeMenu;
     }
 
     si userGameModeMenuResponse_I = 1;
@@ -73,8 +78,8 @@ si main()
                     guess.setSurvivorMode();
                     guess.resetSurvivorModeScore();
                     guess.resetFirstGuessLettersMap();
-                    guess.resetAverageTimeDifferenceToGuessTracker();
                 }
+                guess.resetAverageTimeDifferenceToGuessTracker();
                 // cout << "\n***DEBUG\nSurvivor Mode Enabled (Should be): " << guess.survivorModeEnabled() << "\n***\n";
                 
                 break;
@@ -97,8 +102,8 @@ si main()
                     guess.setTimedMode();
                     guess.resetTimedModeScore();
                     guess.resetFirstGuessLettersMap();
-                    guess.resetAverageTimeDifferenceToGuessTracker();
                 }
+                guess.resetAverageTimeDifferenceToGuessTracker();
                 // cout << "\n***DEBUG\nSurvivor Mode Enabled (Should not be): " << guess.survivorModeEnabled() << "\n***\n";
                 break;
         case 3:
@@ -424,7 +429,8 @@ si main()
                 if(streak > guess.getMaxStreak())
                 {
                     guess.setMaxStreak(streak);
-                    cout << "\n***New Streak Record***\n";
+                    if(guess.getMaxStreak() > guess.getUsersBestStreakOfAllTime())
+                        cout << "\n*** New Streak Record ***\n";
                 }
                 guess.displayHangMan();
             }
@@ -483,7 +489,7 @@ si main()
         {
             if(!guess.userRespondedInTime())
             {
-                declareOutOfTime(guess.getAverageTimeToGuessTracker(), guess.getWord());
+                declareOutOfTime(guess.getDifferenceBetweenGuessClocks(), guess.getWord());
             }
             if(userWonRound)
             {
