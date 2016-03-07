@@ -305,7 +305,9 @@ class word
 
         void setRecordNumberOfGamesSurvivorMode(si newHighScore)
         {
-            m_recordNumberOfGamesWonSurvivorMode = newHighScore;
+            // m_recordNumberOfGamesWonSurvivorMode = newHighScore;
+            setUserSurvivorModeRecordsMap(newHighScore);
+            m_recordNumberOfGamesWonSurvivorMode = m_survivorModeRecords[0];
         }
 //-----------------------------------------------------------------------------------------------------------------------
 
@@ -463,10 +465,14 @@ class word
             std::regex mostGamesWonSurvivorMode("Record number of games won \\(Survivor\\): ([0-9]+)");
             std::regex mostGamesWonRegularMode("Record number of games won \\(Regular\\): ([0-9]+)");
             std::regex mostGamesWonRegularModeOld("Record number of games won: ([0-9]+)");
-            std::regex mostGamesWonTimedMode("Record number of games won \\(Timed\\): ([0-9]+)");   
-            std::regex topThreeGamesWonTimedMode("([0-9])\\) ([0-9]+)");   
+            std::regex mostGamesWonTimedMode("Record number of games won \\(Timed\\): ([0-9]+)");
+            std::regex topThreeGamesWonTimedModeOld("([0-9])\\) ([0-9]+)");
+            std::regex topThreeGamesWonTimedMode("T([0-9])\\) ([0-9]+)");  
+            std::regex topThreeGamesWonSurvivorMode("S([0-9])\\) ([0-9]+)");  
             std::cmatch cm;
-            std::string::size_type maxStreak_str, recordNumberOfGamesSurvivorMode_str, recordNumberOfGamesRegular_str;
+            std::string::size_type maxStreak_str;
+            std::string::size_type recordNumberOfGamesSurvivorMode_str, recordNumberOfGamesSurvivorModeRank_str; 
+            std::string::size_type recordNumberOfGamesRegular_str;
             std::string::size_type recordNumberOfGamesTimedMode_str, recordNumberOfGamesTimedModeRank_str;
 
             if(recordBook.is_open())
@@ -475,6 +481,7 @@ class word
                 {
                     while(getline(recordBook,line))
                     {
+                        // std::cout << "Line: " << line << "\n";
                         if(line == "")
                             continue;
 
@@ -487,11 +494,26 @@ class word
                         //get record number of games won survivor mode
                         if(std::regex_match ( line.c_str(), cm, mostGamesWonSurvivorMode ))
                         {
-                            // std::cout << "** Games Debug Survivor: " << cm.str(1) << "\n";
                             std::string recordWinsSurvivorMode_str = cm.str(1);
-                            setRecordNumberOfGamesSurvivorMode(std::stoi (recordWinsSurvivorMode_str , &recordNumberOfGamesSurvivorMode_str));
+                            // setRecordNumberOfGamesSurvivorMode(std::stoi (recordWinsSurvivorMode_str , &recordNumberOfGamesSurvivorMode_str));
                             continue;
                         }
+
+                        if(std::regex_match ( line.c_str(), cm, topThreeGamesWonSurvivorMode ))
+                        {
+                            std::string recordWinsSurvivorModeRank_str = cm.str(1);
+                            std::string recordWinsSurvivorMode_str = cm.str(2);
+
+                            si convertRecordToInt = std::stoi (recordWinsSurvivorMode_str , &recordNumberOfGamesSurvivorMode_str);
+                            si convertRankToInt = std::stoi (recordWinsSurvivorModeRank_str , &recordNumberOfGamesSurvivorModeRank_str);
+                            m_survivorModeRecords[convertRankToInt-1] = convertRecordToInt;
+                            
+                            if((convertRankToInt-1) == 0)
+                                m_recordNumberOfGamesWonSurvivorMode = convertRecordToInt;
+
+                            continue;
+                        }
+
 
                         //get record number of regular games won
                         if(std::regex_match ( line.c_str(), cm, mostGamesWonRegularMode ))
@@ -509,7 +531,6 @@ class word
                         //get record number of timed games won
                         if(std::regex_match ( line.c_str(), cm, mostGamesWonTimedMode ))
                         {
-                            // std::cout << "** Games Debug Survivor: " << cm.str(1) << "\n";
                             std::string recordWinsTimedMode_str = cm.str(1);
                             if(getRecordNumberOfGamesWonTimedMode() == 0)
                                 setRecordNumberOfGamesTimedMode(std::stoi (recordWinsTimedMode_str , &recordNumberOfGamesTimedMode_str));
@@ -517,13 +538,29 @@ class word
                         }
 
                         //get record number of timed games won for map
+                        // std::cout << "\nLine: " << line << "\n";
                         if(std::regex_match ( line.c_str(), cm, topThreeGamesWonTimedMode ))
                         {
-                            // std::cout << "** Games Debug Survivor: " << cm.str(1) << "\n";
+                            // std::cout << "** Games Debug Timed: " << cm.str(1) << ", " << cm.str(2) << "\n";
                             std::string recordWinsTimedModeRank_str = cm.str(1);
                             std::string recordWinsTimedMode_str = cm.str(2);
                             // std::cout << "** Games Debug Timed Map: " << cm.str(1) << ") " << cm.str(2) <<"\n";
                             // setRecordNumberOfGamesTimedMode(std::stoi (recordWinsTimedMode_str , &recordNumberOfGamesTimedMode_str));
+                            si convertRecordToInt = std::stoi (recordWinsTimedMode_str , &recordNumberOfGamesTimedMode_str);
+                            si convertRankToInt = std::stoi (recordWinsTimedModeRank_str , &recordNumberOfGamesTimedModeRank_str);
+                            m_timedModeRecords[convertRankToInt-1] = convertRecordToInt;
+                            
+                            if((convertRankToInt-1) == 0)
+                                m_recordNumberOfGamesWonTimedMode = convertRecordToInt;
+
+                            continue;
+                        }
+                        
+                        if(std::regex_match ( line.c_str(), cm, topThreeGamesWonTimedModeOld ))
+                        {
+                            std::string recordWinsTimedModeRank_str = cm.str(1);
+                            std::string recordWinsTimedMode_str = cm.str(2);
+
                             si convertRecordToInt = std::stoi (recordWinsTimedMode_str , &recordNumberOfGamesTimedMode_str);
                             si convertRankToInt = std::stoi (recordWinsTimedModeRank_str , &recordNumberOfGamesTimedModeRank_str);
                             m_timedModeRecords[convertRankToInt-1] = convertRecordToInt;
@@ -555,18 +592,18 @@ class word
 
             if(getMaxStreak() > getUsersBestStreakOfAllTime())
             {
-                if(userScoreSurvivorMode > getRecordNumberOfGamesWonSurvivorMode())
-                {
-                    setRecordNumberOfGamesSurvivorMode(userScoreSurvivorMode);
-                }
+                // if(userScoreSurvivorMode > getRecordNumberOfGamesWonSurvivorMode())
+                // {
+                //     setRecordNumberOfGamesSurvivorMode(userScoreSurvivorMode);
+                // }
                 
                 if(userScoreRegularMode > getRecordNumberOfGamesWonRegularMode())
                     setRecordNumberOfGamesRegularMode(userScoreRegularMode);
 
-                if(userScoreTimedMode > getRecordNumberOfGamesWonTimedMode())
-                {
-                    setRecordNumberOfGamesTimedMode(userScoreTimedMode);
-                }
+                // if(userScoreTimedMode > getRecordNumberOfGamesWonTimedMode())
+                // {
+                //     setRecordNumberOfGamesTimedMode(userScoreTimedMode);
+                // }
 
                 if(m_timedModeRecords.size() == 0)
                 {
@@ -575,6 +612,12 @@ class word
 
                 if(m_updatedTimedRecordsMap)
                     m_updatedTimedRecordsMap = false;
+                //survivormode records map
+                if(m_survivorModeRecords.size() == 0)
+                    setUserSurvivorModeRecordsMap(0);
+                
+                if(m_updatedSurvivorRecordsMap)
+                    m_updatedSurvivorRecordsMap = false;
                 //initial indicator user broke a record
                 setUserBrokeARecord();
 
@@ -585,11 +628,11 @@ class word
                 if(userScoreRegularMode > getRecordNumberOfGamesWonRegularMode())
                     setRecordNumberOfGamesRegularMode(userScoreRegularMode);
 
-                if(userScoreTimedMode > getRecordNumberOfGamesWonTimedMode())
-                {
-                    setRecordNumberOfGamesTimedMode(userScoreTimedMode);
-                    // resetTimedModeScore();
-                }
+                // if(userScoreTimedMode > getRecordNumberOfGamesWonTimedMode())
+                // {
+                //     setRecordNumberOfGamesTimedMode(userScoreTimedMode);
+                //     // resetTimedModeScore();
+                // }
                 //mew record indicator
                 if(m_timedModeRecords.size() == 0)
                 {
@@ -598,6 +641,12 @@ class word
 
                 if(m_updatedTimedRecordsMap)
                     m_updatedTimedRecordsMap = false;
+
+                if(m_survivorModeRecords.size() == 0)
+                    setUserSurvivorModeRecordsMap(0);
+                
+                if(m_updatedSurvivorRecordsMap)
+                    m_updatedSurvivorRecordsMap = false;
 
                 setUserBrokeARecord();
 
@@ -617,6 +666,12 @@ class word
 
                 if(m_updatedTimedRecordsMap)
                     m_updatedTimedRecordsMap = false;
+
+                if(m_survivorModeRecords.size() == 0)
+                    setUserSurvivorModeRecordsMap(0);
+                
+                if(m_updatedSurvivorRecordsMap)
+                    m_updatedSurvivorRecordsMap = false;
                 //new record indicator
                 setUserBrokeARecord();
 
@@ -632,18 +687,33 @@ class word
 
                 if(m_updatedTimedRecordsMap)
                     m_updatedTimedRecordsMap = false;
+                //survivormode records
+                if(m_survivorModeRecords.size() == 0)
+                    setUserSurvivorModeRecordsMap(0);
+
+                if(m_updatedSurvivorRecordsMap)
+                    m_updatedSurvivorRecordsMap = false;
 
                 remove(fileName.c_str());
             }
-            else if(m_timedModeRecords.size() == 0)
+            else if(m_timedModeRecords.size() == 0 || m_survivorModeRecords.size() == 0)
             {
-                setUserTimedModeRecordsMap(0);
+                if(m_timedModeRecords.size() == 0)
+                    setUserTimedModeRecordsMap(0);
+                
+                if(m_survivorModeRecords.size() == 0)
+                    setUserSurvivorModeRecordsMap(0);
 
                 remove(fileName.c_str());
             }
-            else if(m_updatedTimedRecordsMap)
+            else if(m_updatedTimedRecordsMap || m_updatedSurvivorRecordsMap)
             {
-                m_updatedTimedRecordsMap = false;
+                if(m_updatedTimedRecordsMap)
+                    m_updatedTimedRecordsMap = false;
+                
+                if(m_updatedSurvivorRecordsMap)
+                    m_updatedSurvivorRecordsMap = false;
+
                 remove(fileName.c_str());
             }
             else return;
@@ -658,6 +728,11 @@ class word
                 if( userScoreSurvivorMode > getRecordNumberOfGamesWonSurvivorMode())
                     recordBook << "\nRecord number of games won (Survivor): " << userScoreSurvivorMode << "\n";
                 else recordBook << "\nRecord number of games won (Survivor): " << getRecordNumberOfGamesWonSurvivorMode() << "\n";
+                
+                for(m_survivorModeRecordsIterator = m_survivorModeRecords.begin(); m_survivorModeRecordsIterator != m_survivorModeRecords.end(); m_survivorModeRecordsIterator++)
+                {
+                    recordBook << "S" << m_survivorModeRecordsIterator->first + 1 << ") " <<  m_survivorModeRecordsIterator->second << "\n";
+                }
 
                 if( userScoreRegularMode > getRecordNumberOfGamesWonRegularMode())
                     recordBook << "\nRecord number of games won (Regular): " << userScoreRegularMode << "\n";
@@ -669,7 +744,7 @@ class word
             
                 for(m_timedModeRecordsIterator = m_timedModeRecords.begin(); m_timedModeRecordsIterator != m_timedModeRecords.end(); m_timedModeRecordsIterator++)
                 {
-                    recordBook << m_timedModeRecordsIterator->first + 1 << ") " <<  m_timedModeRecordsIterator->second << "\n";
+                    recordBook << "T"<< m_timedModeRecordsIterator->first + 1 << ") " <<  m_timedModeRecordsIterator->second << "\n";
                 }
             }
 
@@ -716,6 +791,12 @@ class word
 
 	 		addWhiteSpaceAndEndlChar(rStr, sectionWrapper, i);
 	 		addWhiteSpaceAndEndlChar(sStr, sectionWrapper, i);
+            for(m_survivorModeRecordsIterator = m_survivorModeRecords.begin(); m_survivorModeRecordsIterator != m_survivorModeRecords.end(); m_survivorModeRecordsIterator++)
+            {
+                std::string sMIStr = "*        " + std::to_string(m_survivorModeRecordsIterator->first + 1) + std::string(") ") + std::to_string(m_survivorModeRecordsIterator->second);
+                addWhiteSpaceAndEndlChar(sMIStr, sectionWrapper, i);
+            }
+
             lineWrapper(sectionWrapper, '*');            // std::cout << "* Record streak: " << getUsersBestStreakOfAllTime() << "*\n";
             addWhiteSpaceAndEndlChar(recordStreak, sectionWrapper, i);
             lineWrapper(sectionWrapper, '*');
@@ -904,7 +985,7 @@ class word
                 if(getRecordNumberOfGamesWonTimedMode() != 0)
                 {                    
                     m_timedModeRecords[0] = getRecordNumberOfGamesWonTimedMode();
-                    m_recordNumberOfGamesWonTimedMode = m_timedModeRecords[0];
+                    // m_recordNumberOfGamesWonTimedMode = m_timedModeRecords[0];
                 }
                 else
                     m_timedModeRecords[0] = 0;
@@ -929,7 +1010,7 @@ class word
 
                     m_timedModeRecords[m_timedModeRecordsIterator->first] = userScore;
                     m_updatedTimedRecordsMap = true;
-                    // std::cout << "\nEnd of set user timed mode map, should have replaced:  " << m_timedModeRecordsIterator->first << "\n";
+                    // std::cout << "\n*** You broke into the top 3 ***\n";
                     break;
                 }
             }
@@ -943,6 +1024,63 @@ class word
             {
                 // std::cout << "\nInside top 3: " << m_timedModeRecordsIterator->first << ") " << m_timedModeRecordsIterator->second << ", user score : " << userScore << "\n";
                 if(userScore > m_timedModeRecordsIterator->second)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+ 
+        void setUserSurvivorModeRecordsMap(si userScore)
+        { 
+            // std::cout << "\nInside set user survivor mode records map, user score: " << userScore << "\n";
+
+            if(m_survivorModeRecords.size() == 0)
+            {
+                if(getRecordNumberOfGamesWonSurvivorMode() != 0)
+                {                    
+                    m_survivorModeRecords[0] = getRecordNumberOfGamesWonSurvivorMode();
+                    // m_recordNumberOfGamesWonTimedMode = m_survivorModeRecords[0];
+                }
+                else
+                    m_survivorModeRecords[0] = 0;
+
+                m_survivorModeRecords[1] = 0;
+                m_survivorModeRecords[2] = 0;
+            }
+
+            for(m_survivorModeRecordsIterator = m_survivorModeRecords.begin(); m_survivorModeRecordsIterator != m_survivorModeRecords.end(); m_survivorModeRecordsIterator++)
+            {
+                if(userScore > m_survivorModeRecordsIterator->second)
+                {
+                    if(m_survivorModeRecordsIterator->first == 0)
+                    {
+                        m_survivorModeRecords[m_survivorModeRecordsIterator->first + 2] = m_survivorModeRecords[m_survivorModeRecordsIterator->first + 1];
+                        m_survivorModeRecords[m_survivorModeRecordsIterator->first + 1] = m_survivorModeRecords[m_survivorModeRecordsIterator->first];                    
+                    }
+                    else if(m_survivorModeRecordsIterator->first == 1)
+                    {
+                        m_survivorModeRecords[m_survivorModeRecordsIterator->first + 1] = m_survivorModeRecords[m_survivorModeRecordsIterator->first];                    
+                    }
+
+                    m_survivorModeRecords[m_survivorModeRecordsIterator->first] = userScore;
+                    m_updatedTimedRecordsMap = true;
+                    // std::cout << "\n*** You broke into the top 3 ***\n";
+                    break;
+                }
+            }
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+    
+        tf userBeatTopThreeScoreSurvivorModeRecordsMap(si userScore)
+        { 
+
+            for(m_survivorModeRecordsIterator = m_survivorModeRecords.begin(); m_survivorModeRecordsIterator != m_survivorModeRecords.end(); m_survivorModeRecordsIterator++)
+            {
+                // std::cout << "\nInside top 3: " << m_survivorModeRecordsIterator->first << ") " << m_survivorModeRecordsIterator->second << ", user score : " << userScore << "\n";
+                if(userScore > m_survivorModeRecordsIterator->second)
                 {
                     return true;
                 }
@@ -997,9 +1135,14 @@ class word
         tf m_userBrokeARecord;
 
         //record stuff
-        std::map<si, si> m_timedModeRecords;
-        std::map<si,si>::iterator m_timedModeRecordsIterator;
+        RecordBookMap m_timedModeRecords;
+        RecordBookMapIT m_timedModeRecordsIterator;
         tf m_updatedTimedRecordsMap = false;
+
+        RecordBookMap m_survivorModeRecords;
+        RecordBookMapIT m_survivorModeRecordsIterator;
+        tf m_updatedSurvivorRecordsMap = false;
+
 };
 
 #endif // HANGMAN_HXX

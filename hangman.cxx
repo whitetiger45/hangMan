@@ -223,12 +223,14 @@ si main()
             userSubMenuResponseI = stoi(userSubMenuResponse_str);
 
             if(!userHasCompletedARound && userSubMenuResponseI == 7 && guess.getGuessCount() == 0 )
-                goto gameModeMenu;
-            
-            if(!userHasCompletedARound && userSubMenuResponseI == 8 && guess.getGuessCount() == 0 )
+                goto gameModeMenu;            
+            else if(!userHasCompletedARound && userSubMenuResponseI == 8 && guess.getGuessCount() == 0 )
+                goto quit;            
+            else if(!userHasCompletedARound && guess.getGuessCount() > 0 && userSubMenuResponseI == 7)
                 goto quit;
-            
-            if(guess.getGuessCount() > 0 && userSubMenuResponseI == 7)
+            else if(userHasCompletedARound && userSubMenuResponseI == 7 && guess.getGuessCount() == 0 )
+                goto gameModeMenu;
+            else if(userHasCompletedARound && userSubMenuResponseI == 8 && guess.getGuessCount() == 0 )
                 goto quit;
 //---------------------------------------------------------------------------------------------------------
             switch(userSubMenuResponseI)
@@ -481,9 +483,14 @@ si main()
                 userResponse[0] = 'y';
                 if( guess.getCurrentNumberOfGamesWonSurvivorMode() > guess.getRecordNumberOfGamesWonSurvivorMode() )
                     cout << "\n*** New Survivor Mode Record (Games Won) ***\n";
+
             }
             else
+            {
                 userResponse[0] = 'n';
+                if(guess.userBeatTopThreeScoreSurvivorModeRecordsMap(guess.getCurrentNumberOfGamesWonSurvivorMode()))
+                    guess.setUserSurvivorModeRecordsMap(guess.getCurrentNumberOfGamesWonSurvivorMode());
+            }
         }
         //timed mode continue play
         else if(guess.timedModeEnabled())
@@ -500,13 +507,13 @@ si main()
                 userResponse[0] = 'y';
                 if( guess.getCurrentNumberOfGamesWonTimedMode() > guess.getRecordNumberOfGamesWonTimedMode() )
                     cout << "\n*** New Timed Mode Record (Games Won) ***\n";
-
-                if(guess.userBeatTopThreeScoreTimedModeRecordsMap(guess.getCurrentNumberOfGamesWonTimedMode()))
-                    guess.setUserTimedModeRecordsMap(guess.getCurrentNumberOfGamesWonTimedMode());
             }
             else
             {
                 userResponse[0] = 'n';
+
+                if(guess.userBeatTopThreeScoreTimedModeRecordsMap(guess.getCurrentNumberOfGamesWonTimedMode()))
+                    guess.setUserTimedModeRecordsMap(guess.getCurrentNumberOfGamesWonTimedMode());
             }
         }
         else
@@ -566,10 +573,6 @@ si main()
     if(guess.survivorModeEnabled() && userSubMenuResponseI != 7)
     {
         guess.getStats();
-        // guess.resetSurvivorModeScore();
-        // guess.resetTries();
-        // guess.resetFirstGuessLettersMap();
-        // guess.resetAverageTimeDifferenceToGuessTracker();
         streak = 0;
         userHasCompletedARound = true;
         goto gameModeMenu;
@@ -577,10 +580,6 @@ si main()
     else if(guess.timedModeEnabled() && userSubMenuResponseI != 7)
     {
         guess.getStats();
-        // guess.resetTimedModeScore();
-        // guess.resetTries();
-        // guess.resetFirstGuessLettersMap();
-        // guess.resetAverageTimeDifferenceToGuessTracker();
         streak = 0;
         userHasCompletedARound = true;
         goto gameModeMenu;

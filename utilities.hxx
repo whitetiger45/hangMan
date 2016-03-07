@@ -25,6 +25,8 @@ typedef struct tm * guessTime;
 typedef std::map<l,si> LetterTrackingMap;
 typedef std::map<l,si>::iterator LetterTrackingMapIT;
 typedef std::vector<std::string> HangmanDictionary;
+typedef std::map<si, si> RecordBookMap;
+typedef std::map<si, si>::iterator RecordBookMapIT;
 
 #define func(n, a) void show##n(){std::cout << a << "\n";}
 func(Title, "\n\t   ***********\n\t   * Hangman *\n\t   ***********\n\t ______\n\t|     |\n\t|    \n\t|           o\n\t|          /|\\ \n\t|______    / \\\n\t*****************\n")
