@@ -628,12 +628,6 @@ class word
                 if(userScoreRegularMode > getRecordNumberOfGamesWonRegularMode())
                     setRecordNumberOfGamesRegularMode(userScoreRegularMode);
 
-                // if(userScoreTimedMode > getRecordNumberOfGamesWonTimedMode())
-                // {
-                //     setRecordNumberOfGamesTimedMode(userScoreTimedMode);
-                //     // resetTimedModeScore();
-                // }
-                //mew record indicator
                 if(m_timedModeRecords.size() == 0)
                 {
                     setUserTimedModeRecordsMap(0);

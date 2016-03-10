@@ -7,7 +7,8 @@ si main()
     word guess;
     string line;
     tf playAgain = false, userHasCompletedARound = false;
-    tf userWonRound = false, survivorModeEnabled = false;
+    tf userWonRound = false;
+    // tf survivorModeEnabled = false;
     tf inGame = false;
     l userResponse[1];
     l userGuess[1];
@@ -78,6 +79,9 @@ si main()
                 guess.resetAverageTimeDifferenceToGuessTracker();
                 // cout << "\n***DEBUG\nSurvivor Mode Enabled (Should be): " << guess.survivorModeEnabled() << "\n***\n";
                 
+                if(guess.userAlreadyPlayedOneRound())
+                    guess.setUserAlreadyPlayedOneRound();
+
                 break;
         case 2:
                 if(!guess.displayTimedModeRule())
@@ -102,6 +106,8 @@ si main()
                 guess.resetTimedModeScore();
                 guess.resetAverageTimeDifferenceToGuessTracker();
                 // cout << "\n***DEBUG\nSurvivor Mode Enabled (Should not be): " << guess.survivorModeEnabled() << "\n***\n";
+                if(guess.userAlreadyPlayedOneRound())
+                    guess.setUserAlreadyPlayedOneRound();
                 break;
         case 3:
                 // survivorModeEnabled = false;
@@ -124,6 +130,8 @@ si main()
                 }
 
                 // cout << "\n***DEBUG\nSurvivor Mode Enabled (Should not be): " << guess.survivorModeEnabled() << "\n***\n";
+                if(guess.userAlreadyPlayedOneRound())
+                    guess.setUserAlreadyPlayedOneRound();
                 break;
         case 4:
                 guess.showRecords();
@@ -197,7 +205,7 @@ si main()
             string userSubMenuResponse_str;
             tf guessSinglel = true, userGuessedRightWord = false;
 //-------------------------------------------------------------------------------------------------------
-            if(guess.getGuessCount() == 0 && !guess.userAlreadyPlayedOneRound())
+            if(!guess.userAlreadyPlayedOneRound() && guess.getGuessCount() == 0 )
             {
                 showSubMenuWithReturnToGameModeOption();
                 cout << "User: "; cin >> userSubMenuResponse_str;
@@ -206,7 +214,6 @@ si main()
                     cout << "\nYou must enter a valid menu option (1-8)\n";
                     showSubMenu(); cout << "User: "; cin >> userSubMenuResponse_str;
                 }
-                guess.setUserAlreadyPlayedOneRound();
             }
             else
             {
@@ -223,7 +230,7 @@ si main()
             userSubMenuResponseI = stoi(userSubMenuResponse_str);
 
             if(!userHasCompletedARound && userSubMenuResponseI == 7 && guess.getGuessCount() == 0 )
-                goto gameModeMenu;            
+                goto gameModeMenu;
             else if(!userHasCompletedARound && userSubMenuResponseI == 8 && guess.getGuessCount() == 0 )
                 goto quit;            
             else if(!userHasCompletedARound && guess.getGuessCount() > 0 && userSubMenuResponseI == 7)
@@ -484,6 +491,8 @@ si main()
                 if( guess.getCurrentNumberOfGamesWonSurvivorMode() > guess.getRecordNumberOfGamesWonSurvivorMode() )
                     cout << "\n*** New Survivor Mode Record (Games Won) ***\n";
 
+                if(!guess.userAlreadyPlayedOneRound())
+                    guess.setUserAlreadyPlayedOneRound();
             }
             else
             {
@@ -507,6 +516,9 @@ si main()
                 userResponse[0] = 'y';
                 if( guess.getCurrentNumberOfGamesWonTimedMode() > guess.getRecordNumberOfGamesWonTimedMode() )
                     cout << "\n*** New Timed Mode Record (Games Won) ***\n";
+                
+                if(!guess.userAlreadyPlayedOneRound())
+                    guess.setUserAlreadyPlayedOneRound();
             }
             else
             {
