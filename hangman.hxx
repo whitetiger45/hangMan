@@ -514,7 +514,6 @@ class word
                             continue;
                         }
 
-
                         //get record number of regular games won
                         if(std::regex_match ( line.c_str(), cm, mostGamesWonRegularMode ))
                         {
@@ -588,22 +587,12 @@ class word
         void updateRecordBook()
         {
             std::string fileName("hangManRecordBook.txt");
-            // setUserRecords();
 
             if(getMaxStreak() > getUsersBestStreakOfAllTime())
             {
-                // if(userScoreSurvivorMode > getRecordNumberOfGamesWonSurvivorMode())
-                // {
-                //     setRecordNumberOfGamesSurvivorMode(userScoreSurvivorMode);
-                // }
-                
+
                 if(userScoreRegularMode > getRecordNumberOfGamesWonRegularMode())
                     setRecordNumberOfGamesRegularMode(userScoreRegularMode);
-
-                // if(userScoreTimedMode > getRecordNumberOfGamesWonTimedMode())
-                // {
-                //     setRecordNumberOfGamesTimedMode(userScoreTimedMode);
-                // }
 
                 if(m_timedModeRecords.size() == 0)
                 {
@@ -1083,6 +1072,13 @@ class word
             return false;
         }
 //-----------------------------------------------------------------------------------------------------------------------
+    
+        unsigned int getRound() const
+        { 
+            return m_numberOfGames;
+        }
+//-----------------------------------------------------------------------------------------------------------------------
+      
    private:
 
         tf m_survivorModeEnabled = false;

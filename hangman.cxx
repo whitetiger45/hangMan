@@ -217,6 +217,9 @@ si main()
             }
             else
             {
+                cout << "Round: " << guess.getRound() << "\n";
+                string roundStr = "Round: " + std::to_string(guess.getRound()) + "\n";
+                lineWrapper(roundStr, '-');
                 showSubMenu();
                 cout << "User: "; cin >> userSubMenuResponse_str;
                 while(!isdigit(userSubMenuResponse_str[0]))
@@ -229,15 +232,13 @@ si main()
 
             userSubMenuResponseI = stoi(userSubMenuResponse_str);
 
-            if(!userHasCompletedARound && userSubMenuResponseI == 7 && guess.getGuessCount() == 0 )
+            if(!guess.userAlreadyPlayedOneRound() && userSubMenuResponseI == 7 && guess.getGuessCount() == 0 )
                 goto gameModeMenu;
-            else if(!userHasCompletedARound && userSubMenuResponseI == 8 && guess.getGuessCount() == 0 )
+            else if(!guess.userAlreadyPlayedOneRound() && userSubMenuResponseI == 8 && guess.getGuessCount() == 0 )
                 goto quit;            
-            else if(!userHasCompletedARound && guess.getGuessCount() > 0 && userSubMenuResponseI == 7)
+            else if(!guess.userAlreadyPlayedOneRound() && guess.getGuessCount() > 0 && userSubMenuResponseI == 7)
                 goto quit;
-            else if(userHasCompletedARound && userSubMenuResponseI == 7 && guess.getGuessCount() == 0 )
-                goto gameModeMenu;
-            else if(userHasCompletedARound && userSubMenuResponseI == 8 && guess.getGuessCount() == 0 )
+            else if(guess.userAlreadyPlayedOneRound() && userSubMenuResponseI == 7 )
                 goto quit;
 //---------------------------------------------------------------------------------------------------------
             switch(userSubMenuResponseI)
@@ -581,7 +582,6 @@ si main()
         }
     }while(playAgain);
 
-    //scoreBoard();
     if(guess.survivorModeEnabled() && userSubMenuResponseI != 7)
     {
         guess.getStats();
