@@ -39,7 +39,7 @@ si main()
         goto gameModeMenu;
     }
 
-    si userGameModeMenuResponse_I = 1;
+    usi userGameModeMenuResponse_I = 1;
     userGameModeMenuResponse_I = stoi(userGameModeMenuResponse_str);
 
     //update user mode menu response according to menu displayed
@@ -145,7 +145,7 @@ si main()
 
     do
     { 
-        si count = 1;
+        usi count = 1;
         srand(time(NULL));
 
         getWordAtLocation = rand() % 173139;
@@ -247,7 +247,7 @@ si main()
                 {
                     caseOneStart:
                     string userGuess_str;
-                    si userGuess_i = 1;
+                    usi userGuess_i = 1;
 
                     guess.startTimer();//start
                     askForLetter();
@@ -311,7 +311,7 @@ si main()
                     cin >> userGuessWord_str;
                     if(isdigit(userGuessWord_str[0]))
                     {
-                        si userGuessWord_i = stoi(userGuessWord_str);
+                        usi userGuessWord_i = stoi(userGuessWord_str);
                         if(userGuessWord_i == 1)
                             goto main_menu;
                         else

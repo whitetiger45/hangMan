@@ -21,6 +21,7 @@ typedef bool tf;
 typedef char l;
 typedef double d;
 typedef signed int si;
+typedef unsigned int usi;
 typedef struct tm * guessTime;
 typedef std::map<l,si> LetterTrackingMap;
 typedef std::map<l,si>::iterator LetterTrackingMapIT;
