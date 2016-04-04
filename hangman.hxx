@@ -570,7 +570,10 @@ class word
                             continue;
                         }
                     }
-                 }catch(const std::invalid_argument& ia){}
+                }catch(const std::invalid_argument& ia)
+                {
+                    std::cerr << "Invalid argument: " << ia.what() << '\n';
+                }
             }
             recordBook.close();
 

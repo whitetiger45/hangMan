@@ -8,7 +8,6 @@ si main()
     string line;
     tf playAgain = false, userHasCompletedARound = false;
     tf userWonRound = false;
-    // tf survivorModeEnabled = false;
     tf inGame = false;
     l userResponse[1];
     l userGuess[1];
@@ -42,7 +41,7 @@ si main()
     usi userGameModeMenuResponse_I = 1;
     userGameModeMenuResponse_I = stoi(userGameModeMenuResponse_str);
 
-    //update user mode menu response according to menu displayed
+//update user mode menu response according to menu displayed
     if(userHasCompletedARound)
     {
         if(userGameModeMenuResponse_I == 4)
